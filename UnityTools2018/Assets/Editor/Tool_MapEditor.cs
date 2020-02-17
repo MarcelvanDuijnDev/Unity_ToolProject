@@ -56,7 +56,7 @@ public class Tool_MapEditor : EditorWindow
     #endregion
 
     //Start Window
-    [MenuItem("Tools/Map Editor")]
+    [MenuItem("Tools/Map Editor  %m")]
     static void Init()
     {
         Tool_MapEditor window = EditorWindow.GetWindow(typeof(Tool_MapEditor), false, "Tool_MapEditor") as Tool_MapEditor;
