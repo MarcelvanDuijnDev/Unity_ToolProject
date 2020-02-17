@@ -34,7 +34,7 @@ public class Tool_RealTimeEditorProfiler : EditorWindow
         {
             Object[] Objects = FindObjectsOfType(typeof(GameObject));
 
-            _FPS = (int)(1.0f / Time.smoothDeltaTime);
+            _FPS = (int)(1.0f / Time.smoothDeltaTime); //Not accurate yet
             _TotalObjects = Objects.Length;
         }
     }
