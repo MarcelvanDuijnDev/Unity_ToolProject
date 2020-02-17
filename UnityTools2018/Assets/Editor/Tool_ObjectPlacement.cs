@@ -417,19 +417,20 @@ public class Tool_ObjectPlacement : EditorWindow
                     _SnapPosActive = EditorGUI.Toggle(new Rect(Screen.width / 2 + 50, 3, 20, 20), _SnapPosActive);
                     break;
             }
+        }
 
-            //Shift+MouseDown = Resize
-            if (_ShiftDown && _MouseDown)
-            {
-                _Size = EditorGUI.Slider(new Rect(_ClickPos.x - 15, _ClickPos.y - 10, 50, 20), _Size, 0.01f, 1000000);
-                GUI.Label(new Rect(_ClickPos.x - 50, _ClickPos.y - 10, 500, 20), "Size: ");
-            }
-            //Ctrl+MouseDown = Rotate
-            if (_CtrlDown && _MouseDown)
-            {
-                _Rotation = EditorGUI.Slider(new Rect(_ClickPos.x - 15, _ClickPos.y - 10, 50, 20), _Rotation, -1000000, 1000000);
-                GUI.Label(new Rect(_ClickPos.x - 80, _ClickPos.y - 10, 500, 20), "Rotation: ");
-            }
+        //Hotkeys Resize / Rotate
+        //Shift+MouseDown = Resize
+        if (_ShiftDown && _MouseDown)
+        {
+            _Size = EditorGUI.Slider(new Rect(_ClickPos.x - 15, _ClickPos.y - 10, 50, 20), _Size, 0.01f, 1000000);
+            GUI.Label(new Rect(_ClickPos.x - 50, _ClickPos.y - 10, 500, 20), "Size: ");
+        }
+        //Ctrl+MouseDown = Rotate
+        if (_CtrlDown && _MouseDown)
+        {
+            _Rotation = EditorGUI.Slider(new Rect(_ClickPos.x - 15, _ClickPos.y - 10, 50, 20), _Rotation, -1000000, 1000000);
+            GUI.Label(new Rect(_ClickPos.x - 80, _ClickPos.y - 10, 500, 20), "Rotation: ");
         }
 
         //Inscene Show OptionButton
@@ -480,10 +481,10 @@ public class Tool_ObjectPlacement : EditorWindow
     {
         GameObject createdObj = PrefabUtility.InstantiatePrefab(_Prefabs[_SelectedID]) as GameObject;
         createdObj.transform.position = createPos;
+        createdObj.transform.localScale = new Vector3(_Size, _Size, _Size);
         if (_ParentObj != null)
         {
             createdObj.transform.parent = _ParentObj.transform;
-            createdObj.transform.localScale = new Vector3(_Size,_Size,_Size);
             if (_SnapPosActive)
                 createdObj.transform.position = _SnapPos;
             else
