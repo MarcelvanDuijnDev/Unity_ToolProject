@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEditor;
 
 [ExecuteInEditMode]
-public class Tool_RealTimeEditorProfiler : EditorWindow
+public class Tool_RealTimeProfiler : EditorWindow
 {
     private bool _ShowInScene = true;
     private bool _Pauze;
@@ -14,7 +14,7 @@ public class Tool_RealTimeEditorProfiler : EditorWindow
     [MenuItem("Tools/RealTime Profiler")]
     static void Init()
     {
-        Tool_RealTimeEditorProfiler window = (Tool_RealTimeEditorProfiler)EditorWindow.GetWindow(typeof(Tool_RealTimeEditorProfiler));
+        Tool_RealTimeProfiler window = (Tool_RealTimeProfiler)EditorWindow.GetWindow(typeof(Tool_RealTimeProfiler));
         window.Show();
     }
 
