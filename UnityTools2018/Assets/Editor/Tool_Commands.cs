@@ -22,7 +22,7 @@ public class Tool_Commands : EditorWindow
     private bool _Loaded = false;
 
     //Menu
-    private string[] _MenuOptions = new string[] {"Commands", "Create Command", "Menu" };
+    private string[] _MenuOptions = new string[] {"Commands", "Create Command", "Menu", "Import/Export" };
     private int _MenuSelected = 0;
 
     private bool _EditMode;
@@ -34,7 +34,7 @@ public class Tool_Commands : EditorWindow
     private string[] _NewCommandType_Search = new string[]  { "Scene","Folder","Objects","Tag" };
     private string[] _NewCommandType_Load = new string[]    { "Scene" };
     private string[] _NewCommandType_Create = new string[]  { "Scene","Object" };
-    private string[] _NewCommandType_Other = new string[]  { "Info" };
+    private string[] _NewCommandType_Other = new string[]   { "Info" };
     private int _NewCommandTypesChosen = 0;
     private int _NewCommandTypeOptionChosen = 0;
     private string _NewCommandText = "";
@@ -183,14 +183,17 @@ public class Tool_Commands : EditorWindow
     private void DoCommand()
     {
         //GetCommand
-        if (_NewCommandTypes[_Commands._ToolCommands[_ResultID]._Type] == "Search")
-            DoCommand_Search();
-        if (_NewCommandTypes[_Commands._ToolCommands[_ResultID]._Type] == "Load")
-            DoCommand_Load();
-        if (_NewCommandTypes[_Commands._ToolCommands[_ResultID]._Type] == "Create")
-            DoCommand_Create();
-        if (_NewCommandTypes[_Commands._ToolCommands[_ResultID]._Type] == "Other")
-            DoCommand_Create();
+        if (_ResultID < _ConsoleCommands.Count)
+        {
+            if (_NewCommandTypes[_Commands._ToolCommands[_ResultID]._Type] == "Search")
+                DoCommand_Search();
+            if (_NewCommandTypes[_Commands._ToolCommands[_ResultID]._Type] == "Load")
+                DoCommand_Load();
+            if (_NewCommandTypes[_Commands._ToolCommands[_ResultID]._Type] == "Create")
+                DoCommand_Create();
+            if (_NewCommandTypes[_Commands._ToolCommands[_ResultID]._Type] == "Other")
+                DoCommand_Create();
+        }
     }
     private void DoCommand_Search()
     {
@@ -200,7 +203,6 @@ public class Tool_Commands : EditorWindow
         }
         if (_Commands._ToolCommands[_ResultID]._CommandData[0] == "Folder")
         {
-            //FindObjects(_Commands._ToolCommands[_ResultID]._CommandData[1]);
             string relativePath = _Commands._ToolCommands[_ResultID]._CommandData[1].Substring(_Commands._ToolCommands[_ResultID]._CommandData[1].IndexOf("Assets/"));
             Selection.activeObject = AssetDatabase.LoadAssetAtPath(relativePath, typeof(Object));
         }
@@ -214,7 +216,7 @@ public class Tool_Commands : EditorWindow
         if (_Commands._ToolCommands[_ResultID]._CommandData[0] == "Scene")
         {
            EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo();
-           EditorSceneManager.OpenScene(_Commands._ToolCommands[_CommandID]._CommandData[1]);
+           EditorSceneManager.OpenScene(_Commands._ToolCommands[_ResultID]._CommandData[1]);
         }
     }
     private void DoCommand_Create()
@@ -373,6 +375,7 @@ public class Tool_Commands : EditorWindow
             {
                 _Commands._ToolCommands.Remove(_Commands._ToolCommands[i]);
                 JsonUpdate();
+                break;
             }
             if (_Commands._ToolCommands[i]._ToMenu)
             {
@@ -399,8 +402,7 @@ public class Tool_Commands : EditorWindow
     {
         if (_NewCommandType_Search[_Commands._ToolCommands[_CommandID]._TypeOption] == "Objects")
         {
-            _Commands._ToolCommands[_CommandID]._CommandData[1] = "ObjectName";
-            _Commands._ToolCommands[_CommandID]._CommandData[1] = EditorGUILayout.TextField("Name Gameobject: ", _Commands._ToolCommands[_CommandID]._CommandData[1]);
+            _Commands._ToolCommands[_CommandID]._CommandData[1] = EditorGUILayout.TextField("ObjectName: ", _Commands._ToolCommands[_CommandID]._CommandData[1]);
         }
         if (_NewCommandType_Search[_Commands._ToolCommands[_CommandID]._TypeOption] == "Folder")
         {
@@ -409,8 +411,12 @@ public class Tool_Commands : EditorWindow
         }
         if (_NewCommandType_Search[_Commands._ToolCommands[_CommandID]._TypeOption] == "Tag")
         {
-            _Commands._ToolCommands[_CommandID]._CommandData[1] = "Tag";
             _Commands._ToolCommands[_CommandID]._CommandData[1] = EditorGUILayout.TextField("Tag: ", _Commands._ToolCommands[_CommandID]._CommandData[1]);
+        }
+        if (_NewCommandType_Search[_Commands._ToolCommands[_CommandID]._TypeOption] == "Scene")
+        {
+            if (GUILayout.Button("Get Path"))
+                _Commands._ToolCommands[_CommandID]._CommandData[1] = EditorUtility.OpenFilePanel("Scene Path: ", _Commands._ToolCommands[_CommandID]._CommandData[1], "Unity");
         }
     }
     private void Edit_Load()
@@ -427,7 +433,7 @@ public class Tool_Commands : EditorWindow
     }
     private void Edit_Other()
     {
-        if (_NewCommandType_Search[_Commands._ToolCommands[_CommandID]._TypeOption] == "Info")
+        if (_NewCommandType_Other[_Commands._ToolCommands[_CommandID]._TypeOption] == "Info")
         {
             _Commands._ToolCommands[_CommandID]._CommandData[1] = EditorGUILayout.TextField("Info: ", _Commands._ToolCommands[_CommandID]._CommandData[1]);
         }
@@ -437,17 +443,22 @@ public class Tool_Commands : EditorWindow
     private void MenuVieuw()
     {
         GUILayout.BeginVertical("box");
-        for (int i = 0; i < _Commands._ToolCommands.Count; i++)
+        if (_Commands._ToolCommands.Count > 0)
         {
-            if(_Commands._ToolCommands[i]._ToMenu)
+            for (int i = 0; i < _Commands._ToolCommands.Count; i++)
             {
-                if(GUILayout.Button(_Commands._ToolCommands[i]._CommandName))
+                if (_Commands._ToolCommands[i]._ToMenu)
                 {
-                    _ResultID = i;
-                    DoCommand();
+                    if (GUILayout.Button(_Commands._ToolCommands[i]._CommandName))
+                    {
+                        _ResultID = i;
+                        DoCommand();
+                    }
                 }
             }
         }
+        else
+            GUILayout.Label("Add commands to menu");
         GUILayout.EndVertical();
     }
 
@@ -498,7 +509,6 @@ public class Tool_Commands : EditorWindow
         }
 
     }
-
 }
 
 [System.Serializable]
