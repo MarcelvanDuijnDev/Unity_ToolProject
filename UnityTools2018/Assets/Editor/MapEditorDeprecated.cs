@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEngine;
 using System.IO;
 
-public class MapEditor : EditorWindow 
+public class MapEditorDeprecated : EditorWindow 
 {
     #region Variables
     private Color _DefaultColor;
@@ -46,9 +46,9 @@ public class MapEditor : EditorWindow
     private Vector2 _ScrollPos1, _ScrollPos2;
     #endregion
 
-    [MenuItem("Tools/Map Editor")]
+    [MenuItem("Tools/Map Editor (Deprecated)")]
     static void Init() {
-        MapEditor window = EditorWindow.GetWindow(typeof(MapEditor), false, "Map Editor") as MapEditor;
+        MapEditorDeprecated window = EditorWindow.GetWindow(typeof(MapEditorDeprecated), false, "Map Editor") as MapEditorDeprecated;
         window.minSize = new Vector2(550, 750);
         window.maxSize = new Vector2(550, 750);
         window.Show();

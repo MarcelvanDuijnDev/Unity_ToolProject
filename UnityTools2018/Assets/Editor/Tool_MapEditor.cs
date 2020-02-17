@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEditorInternal;
 using System.IO;
 
-public class Tool_ObjectPlacement : EditorWindow
+public class Tool_MapEditor : EditorWindow
 {
     #region Array Icons
     //Prefab Array
@@ -56,10 +56,10 @@ public class Tool_ObjectPlacement : EditorWindow
     #endregion
 
     //Start Window
-    [MenuItem("Tools/Object Placement")]
+    [MenuItem("Tools/Map Editor")]
     static void Init()
     {
-        Tool_ObjectPlacement window = EditorWindow.GetWindow(typeof(Tool_ObjectPlacement), false, "Tool_ObjectPlacement") as Tool_ObjectPlacement;
+        Tool_MapEditor window = EditorWindow.GetWindow(typeof(Tool_MapEditor), false, "Tool_MapEditor") as Tool_MapEditor;
         window.Show();
     }
 
